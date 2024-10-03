@@ -39,21 +39,35 @@ class Signup extends Component {
         e.preventDefault()
         const {username,email,password} = this.state
         console.log('Form Data Submitted:', this.state);
-        const response = await fetch('http://localhost:5000/signup', {
-            method: 'POST', // Specify POST method
-            headers: {
-              'Content-Type': 'application/json', // Set the content type to JSON
-            },
-            body: JSON.stringify({ username, email, password}), // Send the form data in the body
-          });
-          console.log(response)
-          if(response.ok === true) {
-            this.onSubmitForm()
-          }else{
-            this.onSubmitFailure()
-          }
 
+        try {
+            const response = await fetch('http://localhost:5001/signup', {
+                method: 'POST', // Specify POST method
+                headers: {
+                  'Content-Type': 'application/json', // Set the content type to JSON
+                },
+                body: JSON.stringify({ username, email, password}), // Send the form data in the body
+              });
+              const data = await response.json();
+                if (response.ok) {
+                    console.log(data.message); // Logs success message from backend
+            // Do something on success, like redirect or show a success message
+                } else {
+                    console.log(data.error); // Logs error message from backend
+                    this.onSubmitFailure();  // Shows error message on the form
+                }
+             
+        } catch (error) {
+            console.error("Error during signup:", error);
+
+        }
     }
+
+        
+    
+          
+
+    
 
     renderPasswordField = () => {
         const {password} = this.state
@@ -121,7 +135,11 @@ class Signup extends Component {
             <div className='login-form-container'>
                     <form className='form-container' onSubmit={this.onSubmitForm}>
                     <img src='https://img.freepik.com/free-vector/sign-up-concept-illustration_114360-7885.jpg' 
-                            className='login-website-logo' 
+                            className='login-website-logo-mobile-img' 
+                                alt='website logo'
+                            />
+                            <img src='https://img.freepik.com/free-vector/sign-up-concept-illustration_114360-7885.jpg' 
+                            className='login-website-logo-desktop-img image-logo' 
                                 alt='website logo'
                             />
                             <div className='card'>
